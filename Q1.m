@@ -8,6 +8,14 @@ mu(:,1) = [-1;-1;-1;-1];
 mu(:,2) = [1;1;1;1];
 Sigma(:,:,1) = [2 -0.5 0.3 0; -0.5 1 -0.5 0; 0.3 -0.5 1 0; 0 0 0 2];
 Sigma(:,:,2) = [1 0.3 -0.2 0; 0.3 2 0.3 0; -0.2 0.3 1 0; 0 0 0 3];
+
+% mu(:,1) = 5*rand(1,n); 
+% mu(:,2) = 5*rand(1,n);
+% A1 = 3*(rand(n,n)-0.5); 
+% A2 = 3*(rand(n,n)-0.5);
+% Sigma(:,:,1) = A1*A1';
+% Sigma(:,:,2) = A2*A2';
+
 p = [0.7,0.3]; % class priors for labels 0 and 1 respectively
 
 labels = rand(1,N) >= p(1);
@@ -43,6 +51,7 @@ xlabel('Thresholds'), ylabel('P(error) for ERM Discriminant Scores'), title('P(e
 %% ========================= Theoretical and Empirical optimal descriminator threshold ========================= %%
 lambda = [0 1;1 0]; % loss values
 theoretical_gamma = log(((lambda(2,1)-lambda(1,1))*p(1))/((lambda(1,2)-lambda(2,2))*p(2))); %threshold
+min_emperical_PerrorERM = min(PerrorERM)
 min_perrorERM_index = find(PerrorERM == min(PerrorERM));
 optimal_emperical_gamma = thresholdListERM(min_perrorERM_index);
 PtpERM_at_optimal_emperical_gamma = PtpERM(min_perrorERM_index);
@@ -50,17 +59,17 @@ PfpERM_at_optimal_emperical_gamma = PfpERM(min_perrorERM_index);
 
 tau = theoretical_gamma;
 decisions = (descriminant_score_ERM >= tau);
-PerrorERM_theoretical = sum(decisions~=labels)/length(labels);
+min_PerrorERM_theoretical = sum(decisions~=labels)/length(labels)
 
 %% ========================= Threshold plots on ROC curve and P(error;Tau) curve ========================= %%
 subplot(5,2,4), hold on
 plot(optimal_emperical_gamma(1),min(PerrorERM),'g*'), hold on,
 yline(min(PerrorERM))
-legend('P(error,Threshold)', ['Tau = ' num2str(optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(PerrorERM),'%02d')]), 
+legend('P(error,Threshold)', ['Emperical Tau = ' num2str(optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(PerrorERM),'%02d')]), 
 
 subplot(5,2,3), hold on
 plot(PfpERM_at_optimal_emperical_gamma,PtpERM_at_optimal_emperical_gamma,'g*'), hold on,
-legend('ROC curve', ['Tau = ' num2str(optimal_emperical_gamma(1),'%02f')]), 
+legend('ROC curve', ['Emperical Tau = ' num2str(optimal_emperical_gamma(1),'%02f')]), 
 
 %% ========================= 2D Scatter Plots for X components ========================= %%
 label0_indexes = find(labels==0);
@@ -110,7 +119,8 @@ discriminantScoreGrid = reshape(discriminantScoreGridValues,100,100);
 
 subplot(5,2,1),
 contour(aGrid,bGrid,discriminantScoreGrid,[minDSGV*[0.9,0.6,0.3],0,[0.3,0.6,0.9]*maxDSGV]); % plot equilevel contours of the discriminant function 
-legend('Class 0','Class 1', 'Contours of discriminant function');
+lgnd = legend('Class 0','Class 1', 'Contours of discriminant function');
+lgnd.Location = 'southeast';
 
 discriminantScoreGridValues = log(evalGaussian([c(:)';d(:)'],mu(3:4,2),Sigma(3:4,3:4,2)))-log(evalGaussian([c(:)';d(:)'],mu(3:4,1),Sigma(3:4,3:4,1))) - log(theoretical_gamma);
 minDSGV = min(discriminantScoreGridValues);
@@ -119,7 +129,8 @@ discriminantScoreGrid = reshape(discriminantScoreGridValues,100,100);
 
 subplot(5,2,2),
 contour(bGrid,cGrid,discriminantScoreGrid,[minDSGV*[0.9,0.6,0.3],0,[0.3,0.6,0.9]*maxDSGV]); % plot equilevel contours of the discriminant function 
-legend('Class 0','Class 1', 'Contours of discriminant function');
+lgnd = legend('Class 0','Class 1', 'Contours of discriminant function');
+lgnd.Location = 'southeast';
 
 
 %% ========================= Applying Naive Bayesian Assumptions ========================= %%
@@ -142,6 +153,7 @@ xlabel('Thresholds'), ylabel('P(error) for Naive ERM Discriminant'), title('P(er
 
 %% ========================= Threshold plots on ROC curve and P(error;Tau) (Naive Bayesian) ========================= %%
 naive_min_perrorERM_index = find(naive_PerrorERM == min(naive_PerrorERM));
+naive_min_perrorERM = min(naive_PerrorERM)
 naive_optimal_emperical_gamma = naive_thresholdListERM(naive_min_perrorERM_index);
 naive_PtpERM_at_optimal_emperical_gamma = naive_PtpERM(naive_min_perrorERM_index);
 naive_PfpERM_at_optimal_emperical_gamma = naive_PfpERM(naive_min_perrorERM_index);
@@ -149,11 +161,11 @@ naive_PfpERM_at_optimal_emperical_gamma = naive_PfpERM(naive_min_perrorERM_index
 subplot(5,2,6), hold on
 plot(naive_optimal_emperical_gamma(1),min(naive_PerrorERM),'g*'), hold on,
 yline(min(naive_PerrorERM))
-legend('P(error,Threshold)', ['Tau = ' num2str(naive_optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(naive_PerrorERM),'%02f')]), 
+legend('P(error,Threshold)', ['Emperical Tau = ' num2str(naive_optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(naive_PerrorERM),'%02f')]), 
 
 subplot(5,2,5), hold on
 plot(naive_PfpERM_at_optimal_emperical_gamma(1),naive_PtpERM_at_optimal_emperical_gamma(1),'g*'), hold on,
-legend('ROC curve', ['Tau = ' num2str(naive_optimal_emperical_gamma(1),'%02f')]), 
+legend('ROC curve', ['Emperical Tau = ' num2str(naive_optimal_emperical_gamma(1),'%02f')]), 
 
 %% ========================= LDA sample mean and covariance estimate ========================= %%
 muhat(:,1) = mean(x(:,label0_indexes),2);
@@ -174,7 +186,7 @@ if mean(y2)<=mean(y1), w = -w; end % push label0 projections to the left
 subplot(5,2,[7 8]), plot(y1(1,:),zeros(1,size(y1,2)),'r*'); hold on;
 plot(y2(1,:),zeros(1,size(y2,2)),'bo'); axis equal,
 legend('Class 1','Class 0');
-
+title("LDA Projection of Data");
 
 %% ========================= LDA ROC Plot ========================= %%
 y=w'*x;
@@ -188,17 +200,18 @@ xlabel('Thresholds'), ylabel('P(error) for LDA'), title('P(error; Threshold) LDA
 
 %% ========================= Threshold plots on LDA ROC curve and LDA P(error;Tau) curve ========================= %%
 subplot(5,2,10), hold on
+min_LDA_Perror = min(LDA_Perror)
 LDA_min_perror_index = find(LDA_Perror == min(LDA_Perror));
 LDA_optimal_emperical_gamma = LDA_thresholdList(LDA_min_perror_index);
 plot(LDA_optimal_emperical_gamma(1),min(LDA_Perror),'g*'), hold on,
 yline(min(LDA_Perror))
-legend('P(error,Threshold)', ['Tau = ' num2str(LDA_optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(LDA_Perror),'%02d')]), 
+legend('P(error,Threshold)', ['Emperical Tau = ' num2str(LDA_optimal_emperical_gamma(1),'%02f')], ['min P(error) = ' num2str(min(LDA_Perror),'%02d')]), 
 
 LDA_Ptp_at_optimal_emperical_gamma = LDA_Ptp(LDA_min_perror_index);
 LDA_Pfp_at_optimal_emperical_gamma = LDA_Pfp(LDA_min_perror_index);
 subplot(5,2,9), hold on
 plot(LDA_Pfp_at_optimal_emperical_gamma(1),LDA_Ptp_at_optimal_emperical_gamma(1),'g*'), hold on,
-legend('ROC curve', ['Tau = ' num2str(LDA_optimal_emperical_gamma(1),'%02f')]), 
+legend('ROC curve', ['Emperical Tau = ' num2str(LDA_optimal_emperical_gamma(1),'%02f')]), 
 
 %% ========================= Helper Functions ========================= %%
 function g = evalGaussian(x,mu,Sigma)
