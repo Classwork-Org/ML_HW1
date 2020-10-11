@@ -52,17 +52,20 @@ end
 subplot(6,5,5);
 title('1st and 2nd PCA components');
 xlabel('x^{pca}_1'), ylabel('x^{pca}_2'),
-legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd.Location = 'bestoutside';
 
 subplot(6,5,10);
 title('2nd and 3rd PCA components');
 xlabel('x^{pca}_2'), ylabel('x^{pca}_3'),
-legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd.Location = 'bestoutside';
 
 subplot(6,5,[3 4 8 9]);
 title('Scatter Plot For all PCA components');
 xlabel('x^{pca}_1'), ylabel('x^{pca}_2'), zlabel('x^{pca}_3'),
-legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd.Location = 'bestoutside';
 
 % 
 %% ========================= ERM Classification ========================= %%
@@ -110,17 +113,32 @@ end
 subplot(6,5,18),
 title('1st and 2nd PCA Classification');
 xlabel('x^{pca}_1'), ylabel('x^{pca}_2'),
-% legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0 Correcti', 'Class 0 Incorrect', ...
+    'Class 1 Correcti', 'Class 1 Incorrect', ...
+    'Class 2 Correcti', 'Class 2 Incorrect', ...
+    'Class 3 Correcti', 'Class 3 Incorrect');
+lgnd.Location = 'bestoutside';
 
 subplot(6,5,13),
 title('2nd and 3rd PCA Classification');
 xlabel('x^{pca}_2'), ylabel('x^{pca}_3'),
-% legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0 Correcti', 'Class 0 Incorrect', ...
+    'Class 1 Correcti', 'Class 1 Incorrect', ...
+    'Class 2 Correcti', 'Class 2 Incorrect', ...
+    'Class 3 Correcti', 'Class 3 Incorrect');
+lgnd.Location = 'bestoutside';
+
 
 subplot(6,5,[11 12 16 17]),
 title('Scatter Plot For all PCA components Classification');
 xlabel('x^{pca}_1'), ylabel('x^{pca}_2'), zlabel('x^{pca}_3'),
-% legend('Class 0', 'Class 1', 'Class 2', 'Class 3');
+lgnd = legend('Class 0 Correcti', 'Class 0 Incorrect', ...
+    'Class 1 Correcti', 'Class 1 Incorrect', ...
+    'Class 2 Correcti', 'Class 2 Incorrect', ...
+    'Class 3 Correcti', 'Class 3 Incorrect');
+lgnd.Location = 'bestoutside';
+
+
 
 %% ========================= Loss Matrix Modification ========================= %%
 lossMatrix = [0 1 2 3; 10 0 5 10; 20 10 0 1; 30 20 1 0];
