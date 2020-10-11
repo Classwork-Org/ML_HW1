@@ -69,17 +69,16 @@ label1_indexes = find(labels==1);
 subplot(5,2,1),
 plot(x(1,label0_indexes),x(2,label0_indexes),'o'), hold on,
 plot(x(1,label1_indexes),x(2,label1_indexes),'+'),
-lgnd = legend('Class 0','Class 1');
+lgnd = legend('Class 0','Class 1'), 
 title('Data and their true labels For First And Second Component of x'),
 xlabel('x_1'), ylabel('x_2'), 
 
 subplot(5,2,2),
 plot(x(3,label0_indexes),x(4,label0_indexes),'o'), hold on,
 plot(x(3,label1_indexes),x(4,label1_indexes),'+'),
-lgnd = legend('Class 0','Class 1');
+legend('Class 0','Class 1'), 
 title('Data and their true labels For Third And Fourth Component of '),
 xlabel('x_3'), ylabel('x_4');
-
 
 %% ========================= Contour Plot of Decision Boundry ========================= %%
 % to draw 2D contors, let's pretend the problem has been reduced to 
