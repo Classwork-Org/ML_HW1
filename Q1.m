@@ -26,7 +26,7 @@ x = zeros(n,N); % save up space
 
 for i = 1:N
     if(labels(i)==0)
-        x(:,i) = mvnrnd(mu(:,1),Sigma(:,:,1));
+        x(:,i) = mvnrnd(mu(:,1),Sigma(:,:,1)+);
     else
         x(:,i) = mvnrnd(mu(:,2),Sigma(:,:,2));
     end
